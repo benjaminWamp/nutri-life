@@ -1,41 +1,39 @@
-import { Text, View, Image, FlatList } from "react-native";
+import { Text, View, Image, FlatList, StyleSheet } from "react-native";
 import { useRecipe } from "../../../context/recipe";
+import { Link } from "expo-router";
 
 export default function Page() {
   const { recipe } = useRecipe();
-  console.log(recipe);
+  const styles = StyleSheet.create({
+    card: {
+      borderWidth: 1,
+      borderColor: "black",
+      borderRadius: 10,
+      paddingEnd: 10,
+      overflow: "hidden",
+      marginBottom: 10,
+    },
+  });
   return (
     <View style={{ padding: 20 }}>
       <FlatList
         data={recipe}
-        renderItem={({ item }) => (
-          <View style={{ padding: 20 }}>
-            <Text>{JSON.stringify(item)}</Text>
-            {item.details ??
-              item.details.map((detail, i) => (
-                <View key={i}>
-                  <Image source={{ uri: detail.food.image }} />
-                  <Text>{detail.food.label}</Text>
+        renderItem={({ item, index }) => (
+          <Link style={[styles.card, { padding: 20 }]} href={`${index}`}>
+            <Text style={{ fontSize: 25, fontWeight: "bold", marginBottom: 5 }}>Recette {index + 1}</Text>
+            <Text style={{ marginBottom: 5 }}>Total des calories : {item.totalKCAL}</Text>
+            <FlatList
+              data={item.details}
+              renderItem={({ item, i }) => (
+                <View key={i} style={[styles.card, { flexDirection: "row", marginBottom: 5, width: "100%" }]}>
+                  <Image source={{ uri: item.food.image }} style={{ width: 100, height: 100 }} />
+                  <Text>{item.food.label}</Text>
                 </View>
-              ))}
-          </View>
+              )}
+            />
+          </Link>
         )}
       />
-
-      {/* {recipe &&
-        Array.isArray(recipe) &&
-        recipe.map((r, i) => (
-          <View key={i}>
-            <Text>Recette {i + 1}</Text>
-            {r.ingredients.map((ingredient, j) => (
-              <View key={j}>
-                <Image source={{ uri: ingredient.image }} />
-                <Text>{ingredient.name}</Text>
-                <Text>{ingredient.quantity}</Text>
-              </View>
-            ))}
-          </View>
-        ))} */}
     </View>
   );
 }

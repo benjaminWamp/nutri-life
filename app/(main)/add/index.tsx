@@ -11,7 +11,7 @@ const add = () => {
   const [meals, setMeals] = useState<any[]>([]);
   const [ingredientAdded, setIngredientAdded] = useState<Array<any>>([]);
 
-  const { recipe, setRecipe } = useRecipe();
+  const { recipe, addRecipe } = useRecipe();
 
   const debounceValue = useDebounce(ingredient, 500);
 
@@ -27,19 +27,17 @@ const add = () => {
       {}
     );
     const meals = await response.json();
-    console.log(meals);
+
     setMeals(meals.hints.map((hint: any) => hint));
   };
 
   const addIngredient = (ingredient: any) => {
-    console.log("ingredient", ingredient);
-
     setIngredientAdded([...ingredientAdded, ingredient]);
     setMeals([]);
     setIngredient("");
   };
 
-  const addRecipe = () => {
+  const addRecipeToRecipes = () => {
     const recipeAddedList = {
       details: [...ingredientAdded],
       totalKCAL: ingredientAdded.reduce((acc, ingredient) => {
@@ -47,7 +45,7 @@ const add = () => {
       }, 0),
     };
 
-    setRecipe([...recipe, recipeAddedList]);
+    addRecipe(recipeAddedList);
     setIngredientAdded([]);
     router.push("/");
   };
@@ -122,7 +120,7 @@ const add = () => {
               <Text style={{ flex: 1 }}>Total cal. : {ingredient.food.nutrients.ENERC_KCAL}(kCal)</Text>
             </View>
           ))}
-          <Button mode="contained" onPress={addRecipe} style={{ marginBottom: 10 }}>
+          <Button mode="contained" onPress={addRecipeToRecipes} style={{ marginBottom: 10 }}>
             Ajouter la recette
           </Button>
         </ScrollView>
