@@ -3,6 +3,7 @@
     "name": "nutri-life",
     "slug": "nutri-life",
     "version": "1.0.0",
+    "scheme": "nutri-life-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "web": {
+    "bundler": "metro"
+  }
   }
 }
